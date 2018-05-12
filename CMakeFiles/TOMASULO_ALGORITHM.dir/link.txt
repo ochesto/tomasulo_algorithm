@@ -1,1 +1,0 @@
-/usr/bin/c++    -std=c++11 -lm -fopenmp -g   CMakeFiles/TOMASULO_ALGORITHM.dir/src/main.cpp.o  -o TOMASULO_ALGORITHM 
