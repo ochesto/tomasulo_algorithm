@@ -7,7 +7,7 @@
 
 class Bus {
     private:
-        Mem _mem;
+        Mem mem;
         RegBankInt _reg_bank_int;
         RegBankFloat _reg_bank_float;
     public:
