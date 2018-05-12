@@ -10,4 +10,4 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 add_executable(
     TOMASULO_ALGORITHM
     src/main.cpp
-)
+        src/issue.cpp src/issue.hpp)
