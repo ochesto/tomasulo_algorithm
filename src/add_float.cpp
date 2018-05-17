@@ -1,40 +1,51 @@
-#define CYCLES 6
+//Libs C++
+#include <limits>
+
+//Local libs
+#include "constants.hpp"
 
 AddFloat::AddFloat() {
     _busy = false;
-    _cycles = CYCLES;
+    _cycles = FLOAT_CYCLES;
+    _param_1 = std::numeric_limits<double>::quiet_NaN();
+    _param_2 = std::numeric_limits<double>::quiet_NaN();
+    _result = std::numeric_limits<double>::quiet_NaN();
 }
 
-double AddFloat::add( double p_p1, double p_p2 ) {
-    double result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
+void AddFloat::set_parameters( double p_param_1, double p_param_2 ) {
+    _param_1 = p_param_1;
+    _param_2 = p_param_2;
+    _result = std::numeric_limits<double>::quiet_NaN();
+}
+
+void AddFloat::add() {
+    if( _cycles > 1 && _cycles <= FLOAT_CYCLES ) {
         _cycles--;
         _busy = true;
-        result = 0;
-    }
-    else {
+    } else {
+        _cycles = FLOAT_CYCLES;
         _busy = false;
-        _cycles = CYCLES;
-        result = p_p1 + p_p2;
+        _result = _param_1 + _param_2;
     }
-    return result;
 }
 
-double AddFloat::sub( double p_p1, double p_p2 ) {
-    double result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
+void AddFloat::sub() {
+    if( _param_1 != std::numeric_limits<double>::quiet_NaN() &&
+    _param_1 != std::numeric_limits<double>::quiet_NaN() &&
+    _cycles > 1 && _cycles <= FLOAT_CYCLES ) {
         _cycles--;
         _busy = true;
-        result = 0;
-    }
-    else {
+    } else {
+        _cycles = FLOAT_CYCLES;
         _busy = false;
-        _cycles = CYCLES;
-        result = p_p1 - p_p2;
+        _result = _param_1 - _param_2;
     }
-    return result;
 }
 
-bool AddFloat::is_busy(void) {
+double AddFloat::get_result() {
+    return _result;
+}
+
+bool AddFloat::is_busy() {
     return _busy;
 }

@@ -1,0 +1,3 @@
+#define INT_CYCLES 2
+#define FLOAT_CYCLES 6
+#define AMOUNT_REGS 32

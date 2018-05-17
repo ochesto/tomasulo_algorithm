@@ -1,69 +1,72 @@
-#define CYCLES 2
+//Libs C++
+#include <limits>
+
+//Local libs
+#include "constants.hpp"
 
 ALUInt::ALUInt() {
     _busy = false;
-    _cycles = CYCLES;
+    _cycles = INT_CYCLES;
+    _param_1 = std::numeric_limits<int>::quiet_NaN();
+    _param_2 = std::numeric_limits<int>::quiet_NaN();
+    _result = std::numeric_limits<int>::quiet_NaN();
 }
 
-int ALUInt::add( int p_p1, int p_p2 ){
-    int result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
-        _cycles--;
-        _busy = true;
-        result = 0;
-    }
-    else {
-        _busy = false;
-        _cycles = CYCLES;
-        result = p_p1 + p_p2;
-    }
-    return result;
+void ALUInt::set_parameters( int p_param_1, int p_param_2 ) {
+    _param_1 = p_param_1;
+    _param_2 = p_param_2;
+    _result = std::numeric_limits<int>::quiet_NaN();
 }
 
-int ALUInt::sub( int p_p1, int p_p2 ){
-    int result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
+void ALUInt::add(){
+    if( _cycles > 1 && _cycles <= INT_CYCLES ) {
         _cycles--;
         _busy = true;
-        result = 0;
-    }
-    else {
+    } else {
+        _cycles = INT_CYCLES;
         _busy = false;
-        _cycles = CYCLES;
-        result = p_p1 - p_p2;
+        _result = _param_1 + _param_2;
     }
-    return result;   
 }
 
-int ALUInt::mult( int p_p1, int p_p2 ){
-    int result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
+void ALUInt::sub(){
+    if( _cycles > 1 && _cycles <= INT_CYCLES ) {
         _cycles--;
         _busy = true;
-        result = 0;
-    }
-    else {
+    } else {
+        _cycles = INT_CYCLES;
         _busy = false;
-        _cycles = CYCLES;
-        result = p_p1 * p_p2;
+        _result = _param_1 - _param_2;
     }
-    return result;   
 }
 
-int ALUInt::div( int p_p1, int p_p2 ){
-    int result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
+void ALUInt::mult(){
+    if( _cycles > 1 && _cycles <= INT_CYCLES ) {
         _cycles--;
         _busy = true;
-        result = 0;
-    }
-    else {
+    } else {
+        _cycles = INT_CYCLES;
         _busy = false;
-        _cycles = CYCLES;
-        if( p_p2 != int(0) ) result = p_p1 / p_p2;   
-        else result = int(0);
+        _result = _param_1 * _param_2;
     }
-    return result;
+}
+
+void ALUInt::div(){
+    if( _cycles > 1 && _cycles <= INT_CYCLES ) {
+        _cycles--;
+        _busy = true;
+    } else {
+        _cycles = INT_CYCLES;
+        _busy = false;
+        if( _param_2 != int(0) )
+            _result = _param_1 / _param_2;
+        else
+            _result = int(0);
+    }
+}
+
+int ALUInt::get_result() {
+    return _result;
 }
 
 bool ALUInt::is_busy(void) {

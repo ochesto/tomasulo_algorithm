@@ -5,10 +5,15 @@ class AddFloat {
     private:
         bool _busy;
         int _cycles;
+        double _param_1;
+        double _param_2;
+        double _result;
     public:
         AddFloat();
-        double add( double p_p1, double p_p2 );
-        double sub( double p_p1, double p_p2 );
+        void set_parameters( double p_param_1, double p_param_2 );
+        void add();
+        void sub();
+        double get_result(); 
         bool is_busy();
 };
 

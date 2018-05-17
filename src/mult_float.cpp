@@ -1,24 +1,36 @@
+//Libs C++
+#include <limits>
 
-#define CYCLES 6
+//Local libs
+#include "constants.hpp"
 
 MultFloat::MultFloat(){
     _busy = false;
-    _cycles = CYCLES;
+    _cycles = FLOAT_CYCLES;
+    _param_1 = std::numeric_limits<double>::quiet_NaN();
+    _param_2 = std::numeric_limits<double>::quiet_NaN();
+    _result = std::numeric_limits<double>::quiet_NaN();
 }
 
-double MultFloat::mult( double p_p1, double p_p2 ){
-    double result;
-    if( _cycles > 0 && _cycles <= CYCLES ) {
+void MultFloat::set_parameters( double p_param_1, double p_param_2 ) {
+    _param_1 = p_param_1;
+    _param_2 = p_param_2;
+    _result = std::numeric_limits<double>::quiet_NaN();
+}
+
+void MultFloat::mult(){
+    if( _cycles > 1 && _cycles <= FLOAT_CYCLES ) {
         _cycles--;
         _busy = true;
-        result = 0;
-    }
-    else {
+    } else {
+        _cycles = FLOAT_CYCLES;
         _busy = false;
-        _cycles = CYCLES;
-        result = p_p1 * p_p2;
+        _result = _param_1 * _param_2;
     }
-    return result;  
+}
+
+double MultFloat::get_result() {
+    return _result;
 }
 
 bool MultFloat::is_busy(void) {
