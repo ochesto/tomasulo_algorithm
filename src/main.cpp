@@ -6,22 +6,17 @@
 
 #include <limits>
 
-#include "add_float.hpp"
-#include "div_float.hpp"
-#include "mult_float.hpp"
-#include "alu_int.hpp"
-
 int main( int argc, char* argv[] ){
     std::string exit = "";
     std::vector<work::Issue::instr_struct> instr_rom;
-    /*while(exit != "exit") {
-        work::Issue::instr_struct instr;
-        std::getline(std::cin, instr.instr_name);
-        exit = instr.instr_name;
-        if(exit == "exit") break;
-        instr_rom.push_back(instr);
+    //while(exit != "exit") {
+    //    work::Issue::instr_struct instr;
+    //    std::getline(std::cin, instr.instr_name);
+    //    exit = instr.instr_name;
+    //    if(exit == "exit") break;
+    //    instr_rom.push_back(instr);
+    //}
 
-    }*/
     work::Issue::instr_struct instr;
     instr.instr_name = "LD.D F6 0 R2";
     instr_rom.push_back(instr);

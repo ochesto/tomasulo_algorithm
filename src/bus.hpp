@@ -5,6 +5,11 @@
 #include "reg_bank_int.hpp"
 #include "reg_bank_float.hpp"
 
+#include "add_float.hpp"
+#include "div_float.hpp"
+#include "mult_float.hpp"
+#include "alu_int.hpp"
+
 class Bus {
     private:
         Mem _mem;
@@ -18,6 +23,11 @@ class Bus {
         void write_to_mem( int p_addr, double p_value );
         void write_to_reg_int( int p_addr, int p_value );
         void write_to_reg_float( int p_addr, double p_value );
+
+        AddFloat _float_adder;
+        DivFloat _float_div;
+        MultFloat _float_mult;
+        ALUInt _int_alu;
 };
 
 #include "bus.cpp"
