@@ -58,5 +58,4 @@ namespace work {
   };
 }
 
-
 #endif //TOMASULO_ALGORITHM_ISSUE_HPP
