@@ -4,7 +4,7 @@
 
 class RegBankInt {
     private:
-        int _regs[AMOUNT_REGS];
+        int _regs[AMOUNT_REGS] = {4,5,6,4,5,6,4,5,6,4,5,6,4,5,6,4,5,6,4,5,6,4,5,6,4,5,6};
     public:
         int read_reg( int p_reg );
         void write_reg( int p_reg, int p_value );

@@ -74,6 +74,7 @@ namespace work {
                     std::string tmp = instr.at(3);
                     reservation_table.at(k).vk = _bus.read_reg_int(std::stoi(tmp.substr(1, tmp.length() - 1)));
                     reservation_table.at(k).busy = true;
+                    reservation_table.at(k).index = i;
                     updateRegStatus(instr.at(1), operation);
                     instr_file.at(i).issue = true;
                   }
@@ -88,14 +89,18 @@ namespace work {
                   reservation_table.at(7 + k).op = "STORE";
                   reservation_table.at(7 + k).busy = true;
                   std::string tmp = instr.at(3);
+                  std::string tmp1 = instr.at(1);
+                  std::string reg = checkDependecy(tmp1);
                   try {
-                    reservation_table.at(k).vj = std::stoi(instr.at(2)) + _bus.read_reg_int(std::stoi(tmp.substr(1, tmp.length() - 1)));;
+                    reservation_table.at(k).vj = std::stoi(instr.at(2)) + _bus.read_reg_int(std::stoi(tmp.substr(1, tmp.length() - 1)));
+                    reservation_table.at(k).vk = (reg == "") ? _bus.read_reg_float( std::stoi(tmp1.substr(1, tmp1.length() - 1)) ):0;
                   }catch(std::exception& e){
                     std::cout << "This presents an error: "<< instr.at(0) << std::endl;
                     std::cout << __LINE__ << std::endl;
                   }
-                  reservation_table.at(7 + k).qk = checkDependecy(instr.at(1));
+                  reservation_table.at(7 + k).qk = reg;
                   reservation_table.at(7 + k).busy = true;
+                  reservation_table.at(7 + k).index = i;
                   total_slot -= 1;
                   instr_file.at(i).issue = true;
                 }
@@ -115,10 +120,15 @@ namespace work {
                     reservation_table.at(index + k).busy = true;
                     std::string reg_s1 = checkDependecy(instr.at(2));
                     std::string reg_s2 = checkDependecy(instr.at(3));
-                    reservation_table.at(index + k).qj = (reg_s1 == "") ? instr.at(2) : reg_s1;
-                    reservation_table.at(index + k).qk = (reg_s2 == "") ? instr.at(3) : reg_s2;
+                    std::string tmp0 = instr.at(2);
+                    std::string tmp1 = instr.at(3);
+                    reservation_table.at(index + k).qj = reg_s1;
+                    reservation_table.at(index + k).qk = reg_s2;
+                    reservation_table.at(index + k).vj = (reg_s1 == "") ? _bus.read_reg_float( std::stoi(tmp0.substr(1, tmp0.length() - 1)) ):0;
+                    reservation_table.at(index + k).vk = (reg_s2 == "") ? _bus.read_reg_float( std::stoi(tmp1.substr(1, tmp1.length() - 1)) ):0;
                     reservation_table.at(index + k).busy = true;
                     instr_file.at(i).issue = true;
+                    reservation_table.at(index + k).index = i;
                     updateRegStatus(instr.at(1), operation);
                   }
                   total_slot -= 1;
@@ -146,6 +156,41 @@ namespace work {
         break;
       }
 
+    }
+  }
+
+  void Issue::getOperations(std::vector<work::Issue::reservation_slot> &operations) {
+    int size = reservation_table.size();
+    for (int i = 0; i < size && operations.size() < 3; ++i) {
+      reservation_slot tmp = reservation_table.at(i);
+      if( (tmp.qk == "") && (tmp.qj == "") && tmp.busy){
+        operations.push_back(tmp);
+      }
+    }
+  }
+
+  void Issue::updateData(work::Issue::reservation_slot &operation, double result) {
+    int size = reservation_table.size();
+    for (int i = 0; i < size; ++i) {
+      if (reservation_table.at(i).qj == operation.name){
+        reservation_table.at(i).vj = result;
+        reservation_table.at(i).qj = "";
+      }
+
+      if (reservation_table.at(i).qk == operation.name){
+        reservation_table.at(i).vj = result;
+        reservation_table.at(i).qk = "";
+      }
+
+      if(reservation_table.at(i).name == operation.name){
+        reservation_slot _new;
+        _new.name = operation.name;
+        reservation_table.at(i) = _new;
+        int reg_size = register_status.size();
+        for (int j = 0; j < reg_size; ++j) {
+          register_status.at(j).reg_value = (register_status.at(j).reg_value == operation.name)?"":register_status.at(j).reg_value;
+        }
+      }
     }
   }
 }

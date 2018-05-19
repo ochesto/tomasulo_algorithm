@@ -4,7 +4,7 @@
 
 class RegBankFloat {
     private:
-        double _regs[AMOUNT_REGS];
+        double _regs[AMOUNT_REGS] = {1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3};
     public:
         double read_reg( int p_reg );
         void write_reg( int p_reg, double p_value );

@@ -16,6 +16,7 @@ void AddFloat::set_parameters( double p_param_1, double p_param_2 ) {
     _param_1 = p_param_1;
     _param_2 = p_param_2;
     _result = std::numeric_limits<double>::quiet_NaN();
+    _busy = true;
 }
 
 void AddFloat::add() {

@@ -27,6 +27,7 @@ namespace work {
       double vj = 0;
       double vk = 0;
       int a = 0;
+      int index = -1;
       bool busy = false;
     };
     struct instr_struct {
@@ -42,18 +43,21 @@ namespace work {
     };
 
     void check_issue(std::vector<Issue::instr_struct> &instr_file);
+    void getOperations(std::vector<reservation_slot>& operations);
+    void updateData(reservation_slot& operation, double result);
 
     std::vector<reservation_slot> reservation_table;
     std::vector<float_register> register_status;
+    Bus _bus;
+    int total_slot = 7;
 
   private:
-    int total_slot = 7;
+
 
     std::string checkDependecy(std::string reg);
 
     void updateRegStatus(std::string reg_name, std::string reg_op);
 
-    Bus _bus;
 
   };
 }
